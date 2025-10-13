@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.36105.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GimuGuardBot", "GimuGuardBot\GimuGuardBot.csproj", "{E133CBDA-8698-4F9E-991E-3554CCE0F945}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GimuGuardBot.Api", "GimuGuardBot.Api\GimuGuardBot.Api.csproj", "{018650CE-A486-49BD-B520-D69DC54CD048}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E133CBDA-8698-4F9E-991E-3554CCE0F945}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E133CBDA-8698-4F9E-991E-3554CCE0F945}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E133CBDA-8698-4F9E-991E-3554CCE0F945}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E133CBDA-8698-4F9E-991E-3554CCE0F945}.Release|Any CPU.Build.0 = Release|Any CPU
+		{018650CE-A486-49BD-B520-D69DC54CD048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{018650CE-A486-49BD-B520-D69DC54CD048}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{018650CE-A486-49BD-B520-D69DC54CD048}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{018650CE-A486-49BD-B520-D69DC54CD048}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6CACDC82-7872-42B6-8A40-9FA95BA09908}
+	EndGlobalSection
+EndGlobal
