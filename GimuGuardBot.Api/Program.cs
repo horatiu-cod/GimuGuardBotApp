@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.Configure<BotConfiguration>(builder.Configuration.GetSection(BotConfiguration.ConfigurationSectionName));
-builder.Services.AddHttpClient("telegram_bot_client")
+builder.Services.AddHttpClient("telegram_bot_client").RemoveAllLoggers()
     .AddTypedClient<ITelegramBotClient>((httpClient, sp) =>
     {
         var config = sp.GetRequiredService<IOptions<BotConfiguration>>().Value;
@@ -22,10 +22,12 @@ builder.Services.AddHttpClient("telegram_bot_client")
 var activeChallenges = new ConcurrentDictionary<long, int>();
 
 var app = builder.Build();
+
+
 var logger = app.Services.GetRequiredService<ILogger<Program>>();
 
 // --- 3. Webhook Endpoint ---
-app.MapPost("/webhook", async (Update update, ITelegramBotClient botClient, IOptions<BotConfiguration> options) =>
+app.MapPost("bot/webhook", async (Update update, ITelegramBotClient botClient, IOptions<BotConfiguration> options) =>
 {
     var config = options.Value;
 
@@ -54,27 +56,47 @@ app.MapPost("/webhook", async (Update update, ITelegramBotClient botClient, IOpt
     return Results.Ok();
 });
 
+
 // --- 4. Webhook Registration (Keep this for deployment) ---
-app.MapGet("/setwebhook", async (ITelegramBotClient botClient, IOptions<BotConfiguration> options, IConfiguration configuration) =>
+app.MapGet("bot/setwebhook", async (ITelegramBotClient botClient, IOptions<BotConfiguration> options, IConfiguration configuration) =>
 {
     var config = options.Value;
-    var externalUrl = configuration["ASPNETCORE_URLS"]?.Split(';').FirstOrDefault(url => url.StartsWith("https"))
-                      ?? Environment.GetEnvironmentVariable("ASPNETCORE_URLS")?.Split(';').FirstOrDefault(url => url.StartsWith("https"));
+    var externalUrl = string.Empty;
+    if (!app.Environment.IsDevelopment())
+    {
+        externalUrl = configuration["ASPNETCORE_URLS"]?.Split(';').FirstOrDefault(url => url.StartsWith("https"))
+                    ?? Environment.GetEnvironmentVariable("ASPNETCORE_URLS")?.Split(';').FirstOrDefault(url => url.StartsWith("https"));
+    }
+    else
+    {
+        externalUrl = config.ExternalUrl;
+    }
+  
 
     if (string.IsNullOrEmpty(externalUrl))
     {
         return Results.Problem("Could not determine the public URL for webhook registration.");
     }
 
-    var webhookUrl = $"{externalUrl}/webhook";
+    var webhookUrl = $"{externalUrl}/bot/webhook";
 
     // Listen for Message (for new members) and CallbackQuery (for button clicks)
-    await botClient.SetWebhookAsync(
+    await botClient.SetWebhook(
         url: webhookUrl,
-        allowedUpdates: new[] { UpdateType.Message, UpdateType.CallbackQuery }
+        allowedUpdates: [UpdateType.Message, UpdateType.CallbackQuery]
     );
 
     return Results.Ok($"Webhook successfully set to: {webhookUrl}");
 });
 
 app.Run();
+
+async Task HandleCaptchaAnswer(ITelegramBotClient botClient, CallbackQuery callbackQuery, ConcurrentDictionary<long, int> activeChallenges)
+{
+    throw new NotImplementedException();
+}
+
+async Task InitiateVerification(ITelegramBotClient botClient, long id, User newMember)
+{
+    throw new NotImplementedException();
+}
