@@ -34,7 +34,7 @@ app.MapPost("bot/webhook", async (Update update, ITelegramBotClient botClient, I
     if (update.Message is { } message)
     {
         // 1. Handle New Member Join
-        if (message.Type == MessageType.NewChatMembers && message.Chat.Id == config.PrivateGroupId)
+        if (message.NewChatMembers is not null && message.NewChatMembers.Length != 0 && message.Type == MessageType.NewChatMembers && message.Chat.Id == config.PrivateGroupId)
         {
             foreach (var newMember in message.NewChatMembers)
             {
@@ -91,12 +91,24 @@ app.MapGet("bot/setwebhook", async (ITelegramBotClient botClient, IOptions<BotCo
 
 app.Run();
 
+// --- Helper methods ---
+async Task InitiateVerification(ITelegramBotClient botClient, long chatId, User newMember)
+{
+    logger.LogInformation("New  user {UserId} {Username} joined. Initiating CAPTCHA.", newMember.Id, newMember.Username);
+
+    //Immediatelly restrict the user: they can see messages, can't talk.
+    var restrictedPermissions = new ChatPermissions
+    {
+        CanSendMessages = false
+    };
+    await botClient.RestrictChatMember(chatId: chatId, userId: newMember.Id, permissions: restrictedPermissions);
+    // Set a time limit for restriction
+    untildate 
+}
+
 async Task HandleCaptchaAnswer(ITelegramBotClient botClient, CallbackQuery callbackQuery, ConcurrentDictionary<long, int> activeChallenges)
 {
     throw new NotImplementedException();
 }
 
-async Task InitiateVerification(ITelegramBotClient botClient, long id, User newMember)
-{
-    throw new NotImplementedException();
-}
+
