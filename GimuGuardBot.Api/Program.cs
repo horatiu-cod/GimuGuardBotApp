@@ -30,10 +30,38 @@ var logger = app.Services.GetRequiredService<ILogger<Program>>();
 app.MapPost("bot/webhook", async (Update update, ITelegramBotClient botClient, IOptions<BotConfiguration> options) =>
 {
     var config = options.Value;
+   
+    
+    var myChatMember = update.MyChatMember;
 
+    if(myChatMember is null)
+    {
+        return Results.Ok(); 
+    }
+    // --- STEP 1: Check if the join happened in the public channel ---
+
+    bool isTargetChannel = update.Message?.Chat.Username?
+    .Equals(config.PublicChannelUsername.Replace("@", ""), StringComparison.OrdinalIgnoreCase) == true;
+
+    if (!isTargetChannel)
+    {
+        return Results.Ok();// Acknowledge other updates quickly
+    }
+
+    // --- STEP 2: Check if the status change indicates a new member joining ---
+     // we only care about MyChatMember updates ( when a user join a channel/group)
+    if (update.Type != UpdateType.MyChatMember)
+    {
+        return Results.Ok(); // Acknowledge other updates quickly
+    }
+    var oldStatus = myChatMember?.OldChatMember.Status;
+    var newStatus = myChatMember?.NewChatMember.Status;
+
+     // We check for Left -> Member or Kicked -> Member
+    if(newStatus == ChatMemberStatus.Member && (oldStatus == ChatMemberStatus.Left || oldStatus == ChatMemberStatus.Kicked))
     if (update.Message is { } message)
     {
-        // 1. Handle New Member Join
+        // 1. Handle New Member Join 
         if (message.NewChatMembers is not null && message.NewChatMembers.Length != 0 && message.Type == MessageType.NewChatMembers && message.Chat.Id == config.PrivateGroupId)
         {
             foreach (var newMember in message.NewChatMembers)
