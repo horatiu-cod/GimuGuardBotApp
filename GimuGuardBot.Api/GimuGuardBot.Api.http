@@ -1,6 +1,6 @@
 @GimuGuardBot.Api_HostAddress = http://localhost:5186
 
-GET {{GimuGuardBot.Api_HostAddress}}/weatherforecast/
+POST {{GimuGuardBot.Api_HostAddress}}/bot/webhook
 Accept: application/json
 
 ###

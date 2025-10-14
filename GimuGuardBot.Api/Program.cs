@@ -96,14 +96,14 @@ async Task InitiateVerification(ITelegramBotClient botClient, long chatId, User 
 {
     logger.LogInformation("New  user {UserId} {Username} joined. Initiating CAPTCHA.", newMember.Id, newMember.Username);
 
-    //Immediatelly restrict the user: they can see messages, can't talk.
+    //Immediately restrict the user: they can see messages, can't talk.
     var restrictedPermissions = new ChatPermissions
     {
         CanSendMessages = false
     };
     await botClient.RestrictChatMember(chatId: chatId, userId: newMember.Id, permissions: restrictedPermissions);
     // Set a time limit for restriction
-    untildate 
+     
 }
 
 async Task HandleCaptchaAnswer(ITelegramBotClient botClient, CallbackQuery callbackQuery, ConcurrentDictionary<long, int> activeChallenges)
