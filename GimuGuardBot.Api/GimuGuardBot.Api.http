@@ -1,6 +1,6 @@
-@GimuGuardBot.Api_HostAddress = http://localhost:5186
+@GimuGuardBot.Api_HostAddress = https://4q7zjtfr-7066-inspect.euw.devtunnels.ms
 
-POST {{GimuGuardBot.Api_HostAddress}}/bot/webhook
+POST {{GimuGuardBot.Api_HostAddress}}/bot/setwebhook
 Accept: application/json
 
 ###
