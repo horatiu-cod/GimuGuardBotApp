@@ -1,6 +1,9 @@
-@GimuGuardBot.Api_HostAddress = https://4q7zjtfr-7066-inspect.euw.devtunnels.ms
+@GimuGuardBot.Api_HostAddress = "https://xlsmp3p5-7066-inspect.euw.devtunnels.ms/"
 
-POST {{GimuGuardBot.Api_HostAddress}}/bot/setwebhook
-Accept: application/json
+GET https://df7rgx3x-7066.euw.devtunnels.ms/bot/setwebhook
 
 ###
+GET https://api.telegram.org/bot8475907726:AAGi7wK81pzumjE2osYPcCsVMbKlHN4qrn4/getWebhookInfo
+###
+
+GET https://df7rgx3x-7066.euw.devtunnels.ms/bot/delete

@@ -8,6 +8,7 @@ using GimuGuardBot.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddEnvironmentVariables("Guard_");
 // Add services to the container.
 builder.Services.Configure<BotConfiguration>(builder.Configuration.GetSection(BotConfiguration.ConfigurationSectionName));
 builder.Services.AddHttpClient("telegram_bot_client").RemoveAllLoggers()
@@ -119,10 +120,15 @@ app.MapGet("bot/setwebhook", async (ITelegramBotClient botClient, IOptions<BotCo
         url: webhookUrl,
         allowedUpdates: [UpdateType.Message, UpdateType.CallbackQuery]
     );
-
+    
     return Results.Ok($"Webhook successfully set to: {webhookUrl}");
 });
+app.MapGet("/bot/delete", async (ITelegramBotClient botclient) =>{
+    await botclient.DeleteWebhook();
+    return Results.Ok("Webhook deleted");
+});
 
+//app.UseTelegramBotWebhook();
 await app.RunAsync();
 
 // --- Helper methods ---
